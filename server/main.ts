@@ -5,8 +5,6 @@ import { AppModule } from './app.module';
 import * as express from 'express';
 import { resolve, join } from 'path';
 
-// 当前环境类型
-const isProd = process.env.NODE_ENV === 'production';
 // 生产环境目录
 const distPath = resolve(process.cwd(), 'dist');
 
@@ -14,7 +12,7 @@ const distPath = resolve(process.cwd(), 'dist');
  * 创建开发服务
  * @param server
  */
-async function createDevServer(server) {
+async function createDevServer() {
   const viteServer = await createSsrServer({
     server: {
       middlewareMode: 'ssr',
@@ -68,16 +66,18 @@ async function createProdServer(server) {
 async function setupExpressServer() {
   const server = express();
 
-  const getViteServer = () => {
-    if (isProd) {
-      return createProdServer(server);
-    } else {
-      return createDevServer(server);
+  const createViteServer = () => {
+    switch (process.env.NODE_ENV) {
+      case 'production':
+        return createProdServer(server);
+      case 'development':
+      default:
+        return createDevServer();
     }
   };
 
   // 响应前端请求
-  server.get(/^(?!\/?(api|doc|graphql)).+$/, await getViteServer());
+  server.get(/^(?!\/?(api|doc|graphql)).+$/, await createViteServer());
 
   return server;
 }
