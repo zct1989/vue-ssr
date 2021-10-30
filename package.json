@@ -7,7 +7,9 @@
   "license": "UNLICENSED",
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "nest build",
+    "build": "npm run build:server & npm run build:client",
+    "build:server": "nest build",
+    "build:client": "vite-ssr build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "dev": "npm run start:dev",
     "start": "nest start",
