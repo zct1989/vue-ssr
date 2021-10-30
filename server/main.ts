@@ -63,7 +63,7 @@ async function createProdServer(server) {
  * 安装Express服务
  * @returns
  */
-async function setupExpressServer() {
+async function setupExpressServer(path: RegExp) {
   const server = express();
 
   const createViteServer = () => {
@@ -77,13 +77,15 @@ async function setupExpressServer() {
   };
 
   // 响应前端请求
-  server.get(/^(?!\/?(api|doc|graphql)).+$/, await createViteServer());
+  server.get(path, await createViteServer());
 
   return server;
 }
 
 async function bootstrap() {
-  const server = await setupExpressServer();
+  // 设置Express服务
+  // 仅暴露Api端口
+  const server = await setupExpressServer(/^(?!\/?(api)).+$/);
 
   const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
 
