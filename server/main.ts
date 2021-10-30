@@ -8,9 +8,12 @@ import { resolve, join } from 'path';
 // 当前环境类型
 const isProd = process.env.NODE_ENV === 'production';
 // 生产环境目录
-const distDir = resolve(process.cwd(), 'dist');
+const distPath = resolve(process.cwd(), 'dist');
 
-// 创建开发服务
+/**
+ * 创建开发服务
+ * @param server
+ */
 async function createDevServer(server) {
   const viteServer = await createSsrServer({
     server: {
@@ -18,14 +21,16 @@ async function createDevServer(server) {
     },
   });
 
-  // 响应前端请求
-  server.use(/^(?!\/?(api|doc|graphql)).+$/, viteServer.middlewares);
+  return viteServer.middlewares;
 }
 
-// 创建生产服务
+/**
+ * 创建生产服务
+ * @param server
+ */
 async function createProdServer(server) {
-  const clientPath = resolve(distDir, 'client');
-  const serverPath = resolve(distDir, 'server');
+  const clientPath = resolve(distPath, 'client');
+  const serverPath = resolve(distPath, 'server');
 
   // 获取Manifest配置
   const manifest = await import(join(clientPath, 'ssr-manifest.json'));
@@ -39,7 +44,7 @@ async function createProdServer(server) {
   );
 
   // 响应前端请求
-  server.get(/^(?!\/?(api|graphql)).+$/, async (request, response) => {
+  return async (request, response) => {
     // 请求路径
     const url =
       request.protocol + '://' + request.get('host') + request.originalUrl;
@@ -53,17 +58,26 @@ async function createProdServer(server) {
 
     response.writeHead(status || 200, statusText || headers, headers);
     response.end(html);
-  });
+  };
 }
 
-function setupExpressServer() {
+/**
+ * 安装Express服务
+ * @returns
+ */
+async function setupExpressServer() {
   const server = express();
 
-  if (isProd) {
-    createProdServer(server);
-  } else {
-    createDevServer(server);
-  }
+  const getViteServer = () => {
+    if (isProd) {
+      return createProdServer(server);
+    } else {
+      return createDevServer(server);
+    }
+  };
+
+  // 响应前端请求
+  server.get(/^(?!\/?(api|doc|graphql)).+$/, await getViteServer());
 
   return server;
 }
@@ -77,5 +91,3 @@ async function bootstrap() {
 }
 
 bootstrap();
-
-console.log('123123');
