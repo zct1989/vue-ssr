@@ -17,7 +17,14 @@ async function createDevServer() {
     server: {
       middlewareMode: 'ssr',
     },
-  });
+    getRenderContext: (...aaa) => {
+      return {
+        initialState: {
+          a: 1,
+        },
+      };
+    },
+  } as any);
 
   return viteServer.middlewares;
 }
@@ -52,6 +59,7 @@ async function createProdServer(server) {
       preload: true,
       request,
       response,
+      initialState: { a: 12 },
     });
 
     response.writeHead(status || 200, statusText || headers, headers);
