@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import viteSSR from 'vite-ssr/plugin';
+import tsconfigPaths from 'vite-tsconfig-paths';
 
 import pages from 'vite-plugin-pages';
 import layouts from 'vite-plugin-vue-layouts';
@@ -9,9 +10,23 @@ import layouts from 'vite-plugin-vue-layouts';
 export default defineConfig({
   plugins: [
     vue(),
-    viteSSR({}),
+    viteSSR(),
+    tsconfigPaths(),
     pages({
-      pagesDir: 'src/views',
+      pagesDir: [{ dir: 'src/views', baseRoute: '' }],
+      exclude: ['**/components/*.vue'],
+      extensions: ['vue'],
+      nuxtStyle: true,
+    }),
+    layouts({
+      layoutsDir: 'src/layouts',
     }),
   ],
+  css: {
+    preprocessorOptions: {
+      less: {
+        javascriptEnabled: true,
+      },
+    },
+  },
 });

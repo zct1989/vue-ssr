@@ -19,9 +19,7 @@ async function createDevServer() {
     },
     getRenderContext: (...aaa) => {
       return {
-        initialState: {
-          a: 1,
-        },
+        initialState: {},
       };
     },
   } as any);
@@ -59,7 +57,7 @@ async function createProdServer(server) {
       preload: true,
       request,
       response,
-      initialState: { a: 12 },
+      initialState: {},
     });
 
     response.writeHead(status || 200, statusText || headers, headers);
