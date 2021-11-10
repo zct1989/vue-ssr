@@ -1,17 +1,35 @@
 {
   "compilerOptions": {
-    "module": "ESNext",
-    "target": "es2017",
-    "lib": ["ESNext", "DOM"],
-    "esModuleInterop": true,
+    "baseUrl": ".",
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
     "strict": true,
-    "strictNullChecks": true,
-    "moduleResolution": "Node",
+    "jsx": "preserve",
+    "noUnusedLocals": true,
+    "sourceMap": true,
     "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "incremental": false,
     "skipLibCheck": true,
-    "noUnusedParameters": true,
-    "experimentalDecorators": true
+    "strictNullChecks": true,
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "strictPropertyInitialization": false,
+    "lib": ["esnext", "dom"],
+    "paths": {
+      "~/*": ["src/*"],
+      "@/*": ["src/*"]
+    }
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "*.d.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "typings/**/*.d.ts",
+    "vite.config.ts",
+    "windi.config.ts",
+    "http-request-cli.config.js",
+    "src/**/*.vue",
+    "src/**/*.ts",
+    "src/**/*.tsx"
+  ],
+  "exclude": ["dist", "node_modules"]
 }

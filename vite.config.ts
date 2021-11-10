@@ -5,6 +5,8 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 
 import pages from 'vite-plugin-pages';
 import layouts from 'vite-plugin-vue-layouts';
+import Unocss from 'unocss/vite';
+import { presetUno, presetAttributify } from 'unocss';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -20,6 +22,9 @@ export default defineConfig({
     }),
     layouts({
       layoutsDir: 'src/layouts',
+    }),
+    Unocss({
+      presets: [presetAttributify(), presetUno()],
     }),
   ],
   css: {

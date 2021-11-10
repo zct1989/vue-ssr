@@ -1,6 +1,6 @@
-<template lang="pug">
-a-button(type="primary") 123
-div 123123
+<template>
+  <a-button>123123</a-button>
+  <div class="text-yellow-500">zzz</div>
 </template>
 
 <script setup lang="ts"></script>

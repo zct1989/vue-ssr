@@ -4,6 +4,8 @@ import router from './router';
 import { SSRContext } from './types';
 import bootstrap from './bootstrap';
 
+import 'uno.css';
+
 function installModules(ctx: SSRContext) {
   // 加载模块
   Object.values(import.meta.globEager('./modules/*.ts')).map((i) =>
