@@ -1,5 +1,5 @@
 <template>
-  <a-button>123123</a-button>
+  <a-button type="primary">123123</a-button>
   <div class="text-yellow-500">zzz</div>
 </template>
 

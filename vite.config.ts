@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import viteSSR from 'vite-ssr/plugin';
-import tsconfigPaths from 'vite-tsconfig-paths';
+import autoImport from 'unplugin-auto-import/vite';
 
 import pages from 'vite-plugin-pages';
 import layouts from 'vite-plugin-vue-layouts';
@@ -11,9 +11,22 @@ import { presetUno, presetAttributify } from 'unocss';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    vue(),
+    vue({ refTransform: true }),
     viteSSR(),
-    tsconfigPaths(),
+    autoImport({
+      dts: 'typings/auto-imports.d.ts',
+      include: [/\.vue\??/],
+      imports: [
+        'vue',
+        'vue-router',
+        {
+          '@vueuse/core': [],
+        },
+        {
+          '~/shared/common': ['get', 'set', 'templateRef'],
+        },
+      ],
+    }),
     pages({
       pagesDir: [{ dir: 'src/views', baseRoute: '' }],
       exclude: ['**/components/*.vue'],
